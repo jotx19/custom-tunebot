@@ -157,7 +157,7 @@ func (b *Bot) handlePickSong(s *discordgo.Session, i *discordgo.InteractionCreat
 		RequestedBy: requestedBy,
 	})
 
-	components := PlayerControls(false, detail.Link)
+	components := PlayerControls(false)
 
 	_, _ = s.FollowupMessageCreate(i.Interaction, false, &discordgo.WebhookParams{
 		Embeds:     []*discordgo.MessageEmbed{embed},
@@ -213,7 +213,7 @@ func (b *Bot) handleControl(s *discordgo.Session, i *discordgo.InteractionCreate
 		RequestedBy: requestedBy,
 	})
 
-	comps := PlayerControls(paused, track.Link)
+	comps := PlayerControls(paused)
 
 	_, _ = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
 		Embeds:     &[]*discordgo.MessageEmbed{embed},
