@@ -40,7 +40,6 @@ func (c *Client) SearchSongs(query string) ([]SongLite, error) {
 
 func (c *Client) GetSongByID(id string) (*SongDetail, error) {
 	u, _ := url.Parse(c.Base)
-	// ✅ IMPORTANT: /songs/{id}
 	u.Path = path.Join(u.Path, c.Prefix, "/songs", id)
 
 	raw, err := c.getJSON(u.String())

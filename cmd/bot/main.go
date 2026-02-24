@@ -26,6 +26,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	bot.StartHealthServer()
+
 	if err := b.Start(); err != nil {
 		log.Fatal(err)
 	}
