@@ -38,12 +38,7 @@ func (b *Bot) Start() error {
 
 	b.dg.AddHandler(b.onReady)
 	b.dg.AddHandler(b.onInteractionCreate)
-
-	if err := b.dg.Open(); err != nil {
-		return err
-	}
-
-	return b.registerCommands()
+	return b.dg.Open()
 }
 
 func (b *Bot) Close() error {

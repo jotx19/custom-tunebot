@@ -2,7 +2,16 @@ package bot
 
 import "github.com/bwmarrin/discordgo"
 
-func (b *Bot) registerCommands() error {
+func RegisterCommands(cfg Config) error {
+	dg, err := discordgo.New("Bot " + cfg.Token)
+	if err != nil {
+		return err
+	}
+	if err := dg.Open(); err != nil {
+		return err
+	}
+	defer dg.Close()
+
 	cmds := []*discordgo.ApplicationCommand{
 		{
 			Name:        "play",
@@ -18,19 +27,9 @@ func (b *Bot) registerCommands() error {
 		},
 	}
 
-	appID := b.dg.State.User.ID
-
-	if b.cfg.GuildID != "" {
-		for _, c := range cmds {
-			if _, err := b.dg.ApplicationCommandCreate(appID, b.cfg.GuildID, c); err != nil {
-				return err
-			}
-		}
-		return nil
-	}
-
+	appID := dg.State.User.ID
 	for _, c := range cmds {
-		if _, err := b.dg.ApplicationCommandCreate(appID, "", c); err != nil {
+		if _, err := dg.ApplicationCommandCreate(appID, cfg.GuildID, c); err != nil {
 			return err
 		}
 	}
