@@ -2,8 +2,8 @@ package bot
 
 import (
 	"log"
-
 	"musicbot/internal/musicapi"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -33,12 +33,20 @@ func New(cfg Config) (*Bot, error) {
 }
 
 func (b *Bot) Start() error {
-	// Need VoiceStates to know which VC the user is in
 	b.dg.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildVoiceStates
-
 	b.dg.AddHandler(b.onReady)
 	b.dg.AddHandler(b.onInteractionCreate)
-	return b.dg.Open()
+
+	var err error
+	for i := 0; i < 5; i++ {
+		err = b.dg.Open()
+		if err == nil {
+			return nil
+		}
+		log.Printf("Failed to connect (attempt %d/5): %v", i+1, err)
+		time.Sleep(time.Duration(i+1) * 5 * time.Second)
+	}
+	return err
 }
 
 func (b *Bot) Close() error {
